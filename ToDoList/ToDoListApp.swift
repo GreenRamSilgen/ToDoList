@@ -6,12 +6,20 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct ToDoListApp: App {
     var body: some Scene {
         WindowGroup {
             ToDoListView()
+                .modelContainer(for: ToDo.self)
         }
+    }
+    
+    init() {
+        print("SQL PATH")
+        print(URL.applicationSupportDirectory.path(percentEncoded: false))
+        print("SQL PATH")
     }
 }
