@@ -18,12 +18,25 @@ struct ToDoListView: View {
         NavigationStack {
             List {
                 ForEach(toDos) { toDo in
-                    NavigationLink {
-                        DetailView(toDo: toDo)
-                    } label: {
-                        Text(toDo.item)
+                    HStack{
+                        Image(systemName: toDo.isCompleted ? "checkmark.rectangle": "rectangle")
+                            .onTapGesture {
+                                toDo.isCompleted.toggle()
+                                try? modelContext.save()
+                            }
+                        NavigationLink {
+                            DetailView(toDo: toDo)
+                        } label: {
+                            Text(toDo.item)
+                        }
+                        .font(.title2)
+                        .swipeActions {
+                            Button("Delete", role: .destructive) {
+                                modelContext.delete(toDo)
+                                try? modelContext.save()
+                            }
+                        }
                     }
-                    .font(.title2)
                 }
             }
             .listStyle(.plain)
@@ -36,7 +49,6 @@ struct ToDoListView: View {
                     } label: {
                         Image(systemName: "plus")
                     }
-
                 }
             }
             .fullScreenCover(isPresented: $sheetIsPresented) {
